@@ -27,16 +27,11 @@ class Rules:
 
 def logistic2d(size, radius, roll=True, logres=None):
     y, x = size
-    # Get coordinate values of each point
     yy, xx = np.mgrid[:y, :x]
-    # Distance between each point and the center
     radiuses = np.sqrt((xx - x/2)**2 + (yy - y/2)**2)
-    # Scale factor for the transition width
     if logres is None:
         logres = math.log(min(*size), 2)
     with np.errstate(over="ignore"):
-        # With big radiuses, the exp overflows,
-        # but 1 / (1 + inf) == 0, so it's fine
         logistic = 1 / (1 + np.exp(logres * (radiuses - radius)))
     if roll:
         logistic = np.roll(logistic, y//2, axis=0)
